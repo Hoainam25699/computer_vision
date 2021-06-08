@@ -38,7 +38,6 @@ class CountObject:
 
 
   def process(self, origin_image):
-    
     # remove noise 
     image = cv2.fastNlMeansDenoising(origin_image, None, 30.0, 7, 21)
 
@@ -53,7 +52,7 @@ class CountObject:
     # self.show(image_gray, "image_gray")
     # self.show( image_blur_gray, "image_Blur_gray")
 
-    init = 108
+    init = 128
     kernel = np.ones((3, 3), np.uint8)
 
     # use threshold to separate image into 2 parts 
@@ -71,12 +70,19 @@ class CountObject:
     # self.show(closing, "closing")
 
 
-    img_erosion = cv2.erode(image_thresh, kernel, iterations=1)
     img_dilation = cv2.dilate(image_thresh, kernel, iterations=1)
+    img_erosion_dilation = cv2.erode(img_dilation, kernel, iterations=1)
+
 
     # self.show(img_erosion, "img_erosion")
-    self.show(img_dilation, "img_dilation")
+    # self.show(img_dilation, "img_dilation")
+    # self.show(img_erosion_dilation, "img_erosion_dilation")
 
+
+    # clean noise after dilation and erosion
+
+    img_erode = cv2.medianBlur(img_dilation, 3)
+    self.show(img_erode, "img_erode")
 
     # dist_transform = cv2.distanceTransform(opening, cv2.DIST_L2, 5)
     # dist_transform = cv2.distanceTransform(img_dilation, cv2.DIST_L2, 5)
@@ -86,7 +92,8 @@ class CountObject:
     # self.show(last_image, "last_image")
 
     # return last_image
-    return img_dilation
+    # return img_dilation
+    return img_erode
 
   def count(self, image, last_image):
     # cnts = cv2.findContours(last_image.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -119,18 +126,21 @@ class CountObject:
 count_object_1 = CountObject('test_1.png')
 count_object_1.count_obj()
 
-# count_object_2 = CountObject('test_2.png')
-# count_object_2.count_obj()
-
-count_object_3 = CountObject('test_3.png')
-count_object_3.count_obj()
-
-count_object_4 = CountObject('test_4.png')
-count_object_4.count_obj()
+count_object_2 = CountObject('test_2.png')
+count_object_2.count_obj()
 
 
-count_object_5 = CountObject('photo2.jpg')
-count_object_5.count_obj()
+# count_object_3 = CountObject('test_3.png')
+# count_object_3.count_obj()
+
+# count_object_4 = CountObject('test_4.png')
+# count_object_4.count_obj()
+
+
+
+
+
+
 
 
 
