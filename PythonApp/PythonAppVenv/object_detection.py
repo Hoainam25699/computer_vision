@@ -36,14 +36,11 @@ class CountObject:
     plt.subplot(122),plt.imshow(dst)
     plt.show()
 
-
-
   def highpass(self, img, sigma):
     return img - cv2.GaussianBlur(img, (0,0), sigma) + 127
 
   def process(self, origin_image):
 
-    origin_image = self.highpass(origin_image, 3)
     # remove noise 
     image = cv2.fastNlMeansDenoising(origin_image, None, 30.0, 7, 21)
 
@@ -54,6 +51,10 @@ class CountObject:
     # transform to gray image
     image_gray = cv2.cvtColor(image_blur, cv2.COLOR_BGR2GRAY)
     image_blur_gray = cv2.cvtColor(image_blur, cv2.COLOR_BGR2GRAY)
+
+
+    # balanced histogram image
+    # image_gray =   cv2.equalizeHist(image_gray)
 
     # self.show(image_gray, "image_gray")
     # self.show( image_blur_gray, "image_Blur_gray")
@@ -102,15 +103,13 @@ class CountObject:
     return img_erode
 
   def count(self, image, last_image):
-    # cnts = cv2.findContours(last_image.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
     cnts = cv2.findContours(last_image.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     cnts = imutils.grab_contours(cnts)
 
 
     for (i, c) in enumerate(cnts):
       ((x, y), _) = cv2.minEnclosingCircle(c)
-      # cv2.putText(image, "#{}".format(i + 1), (int(x) - 45, int(y) + 20), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0), 5)
-      # cv2.putText(image, (int(x) - 45, int(y) + 20),  cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0), 5)
       cv2.drawContours(image, [c], -1, (0, 255, 0), 2)
 
     # tis funtion disply the image which i have already describe above
@@ -118,7 +117,7 @@ class CountObject:
     # Filename
 
   
-    cv2.imwrite(self.new_image_path, image)
+    #cv2.imwrite(self.new_image_path, image)
 
     cv2.waitKey(0) 
     cv2.destroyAllWindows()
