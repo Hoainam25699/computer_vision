@@ -3,6 +3,7 @@
 
 !.gitignore
 !object_detection.py
+!object_detection_office.py
 !objets1.jpg
 !photo2
 !test_1.png

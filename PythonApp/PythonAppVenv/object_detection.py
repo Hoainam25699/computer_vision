@@ -37,7 +37,13 @@ class CountObject:
     plt.show()
 
 
+
+  def highpass(self, img, sigma):
+    return img - cv2.GaussianBlur(img, (0,0), sigma) + 127
+
   def process(self, origin_image):
+
+    origin_image = self.highpass(origin_image, 3)
     # remove noise 
     image = cv2.fastNlMeansDenoising(origin_image, None, 30.0, 7, 21)
 
@@ -123,15 +129,15 @@ class CountObject:
     last_image = self.process(img)
     re = self.count(img, last_image)
 
-count_object_1 = CountObject('test_1.png')
-count_object_1.count_obj()
+# count_object_1 = CountObject('test_1.png')
+# count_object_1.count_obj()
 
-count_object_2 = CountObject('test_2.png')
-count_object_2.count_obj()
+# count_object_2 = CountObject('test_2.png')
+# count_object_2.count_obj()
 
 
-# count_object_3 = CountObject('test_3.png')
-# count_object_3.count_obj()
+count_object_3 = CountObject('test_3.png')
+count_object_3.count_obj()
 
 # count_object_4 = CountObject('test_4.png')
 # count_object_4.count_obj()
