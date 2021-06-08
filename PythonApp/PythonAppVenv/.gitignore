@@ -1,0 +1,13 @@
+# created by virtualenv automatically
+*
+
+!.gitignore
+!object_detection.py
+!objets1.jpg
+!photo2
+!test_1.png
+!test_2.png
+!test_3.png
+!test_4.png
+
+
