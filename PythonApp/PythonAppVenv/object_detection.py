@@ -91,6 +91,7 @@ class CountObject:
 
     self.show(img_erode, "img_erode")
     return img_erode
+  
 
   def process_with_fourier_transform(self, origin_image):
     img =  cv2.imread('test_3.png', 0)
@@ -101,7 +102,7 @@ class CountObject:
     rows, cols = img.shape
     crow, ccol = int(rows / 2), int(cols / 2)
     mask = np.zeros((rows, cols, 2), np.uint8)
-    r = 100
+    r = 80
     center = [crow, ccol]
     x, y = np.ogrid[:rows, :cols]
     mask_area = (x - center[0]) ** 2 + (y - center[1]) ** 2 <= r*r
@@ -110,7 +111,7 @@ class CountObject:
     rows, cols = img.shape
     crow, ccol = int(rows / 2), int(cols / 2)
     mask = np.zeros((rows, cols, 2), np.uint8)
-    r_out = 85
+    r_out = 100
     r_in = 25
     center = [crow, ccol]
     x, y = np.ogrid[:rows, :cols]
@@ -141,40 +142,12 @@ class CountObject:
     ax4.title.set_text('After inverse FFT')
     plt.show()
 
-    img_back= cv2.normalize(img_back, None, alpha=1.2, beta=255, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_8U)
-    img_erode = cv2.medianBlur(img_back, 3)
+    img_back= cv2.normalize(img_back, None, alpha=1.2, beta=220, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_8U)
 
-    init = 25
-    kernel = np.ones((3, 3), np.uint8)
 
-    # use threshold to separate image into 2 parts 
-    image_res, image_thresh = cv2.threshold(img_erode, init, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C)
-    # clean noise after dilation and erosion
-    img_erode_ = cv2.medianBlur(image_thresh, 3)
-    dilation = cv2.dilate(img_erode_,kernel,iterations = 2)
-    mg_erosion_dilation = cv2.erode(dilation,kernel,iterations = 5)
 
-    # mg_erosion_dilation = cv2.erode(img_erode_, kernel, iterations=1)
-    thresh = cv2.morphologyEx(mg_erosion_dilation, cv2.MORPH_OPEN, kernel)
-    
-    nlabels, labels, stats, centroids = cv2.connectedComponentsWithStats(thresh, None, None, None, 8, cv2.CV_32S)
-
-    #get CC_STAT_AREA component as stats[label, COLUMN] 
-    areas = stats[1:,cv2.CC_STAT_AREA]
-
-    result = np.zeros((labels.shape), np.uint8)
-
-    for i in range(0, nlabels - 1):
-        if areas[i] >= 150:   #keep
-            result[labels == i + 1] = 255
-
-    cv2.imshow("Result", result)
-
-    self.show(thresh, "thresh")
-    self.show(mg_erosion_dilation, "mg_erosion_dilation")
-
-    return result
-    # return img_erode
+    edges = cv2.Canny(grad,100,255)
+    return edges
     
   def count(self, image, last_image):
     cnts = cv2.findContours(last_image.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
