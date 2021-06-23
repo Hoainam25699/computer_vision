@@ -117,5 +117,5 @@ class CountObject:
     last_image = self.process(img)
 
 
-count_object_5 = CountObject('C:/Users/Admin/Documents/GitHub/computer_vision/PythonApp/PythonAppVenv/test_3.png')
+count_object_5 = CountObject('test_3.png')
 count_object_5.count_obj()
