@@ -113,7 +113,7 @@ class CountObject:
 # count_object_4.count_obj()
 
 
-count_object_5 = CountObject('photo2.JPG')
+count_object_5 = CountObject('test_3.png')
 count_object_5.count_obj()
 
 
