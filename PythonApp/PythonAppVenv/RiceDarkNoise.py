@@ -39,20 +39,20 @@ class CountObject:
   def process(self, origin_image):
     gray_im = cv2.cvtColor(origin_image, cv2.COLOR_BGR2GRAY)
     plt.subplot(221)
-    plt.title('Grayscale image')
+    plt.title('Grayscale image'), plt.xticks([]), plt.yticks([])
     plt.imshow(gray_im, cmap="gray", vmin=0, vmax=255)
 
-    # Contrast adjusting with gamma correction y = 1.2
+    # Contrast adjusting with gamma correction y = 0.1
 
     gray_correct = np.array(255 * (gray_im / 255) ** 0.1 , dtype='uint8')
     plt.subplot(222)
-    plt.title('Gamma Correction y= 0.1')
+    plt.title('Gamma Correction y= 0.1'), plt.xticks([]), plt.yticks([])
     plt.imshow(gray_correct, cmap="gray", vmin=0, vmax=255)
 
     #thresshole
     res,thresh = cv2.threshold(gray_correct,155,255,cv2.THRESH_BINARY)
     plt.subplot(223)
-    plt.title('global Threshold')
+    plt.title('global Threshold'), plt.xticks([]), plt.yticks([])
     plt.imshow(thresh, cmap="gray", vmin=0, vmax=255)
 
     #opening
@@ -60,7 +60,7 @@ class CountObject:
     opening1 = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel)
     opening = cv2.erode(opening1,(15,15), iterations=7)
     plt.subplot(224)
-    plt.title('opening')
+    plt.title('opening'), plt.xticks([]), plt.yticks([])
     plt.imshow(opening, cmap="gray", vmin=0, vmax=255)
 
     blur = cv2.GaussianBlur(opening, (9,9), 2)
